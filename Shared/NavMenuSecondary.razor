@@ -1,0 +1,21 @@
+﻿<MudNavMenu>
+    <MudNavGroup Title="Google Translate" Expanded="true">
+        <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">English</MudNavLink>
+        <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Spanish</MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">MyLMI</MudNavLink>
+    <MudNavLink Href="/servers" Match="NavLinkMatch.Prefix">Resources</MudNavLink>
+    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">Help</MudNavLink>
+</MudNavMenu>
+<!--
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
+-->

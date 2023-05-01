@@ -1,7 +1,20 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --mud-palette-appbar-background : #003663;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.mud-appbar {
+    background-color: #003663;
+}
+
+footer {
+    background-color: #003663;
+    min-height: 100px;
 }
 
 h1:focus {
