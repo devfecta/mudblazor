@@ -8,7 +8,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql-database:/var/lib/mysql
+      - /workspaces/mudblazor/mysql:/var/lib/mysql
     #  - mysql-database:/var/lib/mysql
     #  - //c/Users/kkelm/GitHub/drupal/mysql:/var/lib/mysql
     environment:
@@ -20,13 +20,13 @@ services:
     #  - LETSENCRYPT_HOST=your-website-one.com 
     #  - LETSENCRYPT_EMAIL=your.email@domain.com
     deploy:
-        resources: # Configures physical resource constraints for container to run on platform.
-            limits: # The platform MUST prevent container to allocate more.
-              cpus: "0.5" # Configures a limit or reservation for how much of the available CPU resources (as number of cores) a container can use.
-              memory: 1G # Configures a limit or reservation on the amount of memory a container can allocate, set as a string expressing a byte value.
-            reservations: # The platform MUST guarantee container can allocate at least the configured amount.
-              cpus: "0.25"
-              memory: 512M
+        #resources: # Configures physical resource constraints for container to run on platform.
+        #    limits: # The platform MUST prevent container to allocate more.
+        #      cpus: "0.5" # Configures a limit or reservation for how much of the available CPU resources (as number of cores) a container can use.
+        #      memory: 1G # Configures a limit or reservation on the amount of memory a container can allocate, set as a string expressing a byte value.
+        #    reservations: # The platform MUST guarantee container can allocate at least the configured amount.
+        #      cpus: "0.25"
+        #      memory: 512M
     #deploy:
     #  replicas: 2
     #  update_config:
@@ -46,13 +46,13 @@ services:
     networks:
       - mysql-network
     deploy:
-        resources:
-            limits:
-              cpus: "0.5"
-              memory: 2G
-            reservations:
-              cpus: "0.25"
-              memory: 512M
+        #resources:
+        #    limits:
+        #      cpus: "0.5"
+        #      memory: 2G
+        #    reservations:
+        #      cpus: "0.25"
+        #      memory: 512M
 networks:
   mysql-network:
   
