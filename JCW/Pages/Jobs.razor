@@ -1,0 +1,121 @@
+﻿@inherits LayoutComponentBase
+
+@page "/jobs"
+
+@using DataLibrary;
+@using JCW.Models;
+@inject IDataAccess _data;
+@inject IConfiguration _config;
+
+<h3>Jobs</h3>
+
+<MudTextField @bind-Value="job.Name" Label="Job Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+
+<MudTextField @bind-Value="job.Description" Label="Job Description" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+<!--
+<input type="text" class="form-control" id="description" name="description" @bind-value=job.Description />
+
+<button class="btn btn-primary" @onclick="InsertData">Insert</button>
+
+
+foreach (var job in jobs)
+{
+
+        <div class="input-group">
+            <input type="text" class="form-control" id="@job.Id" name="@job.Id" @bind-value="@job.Id" />
+            <input type="text" class="form-control" id="name@(job.Id)" name="name@(job.Id)" @bind-value="@job.Name" />
+            <input type="text" class="form-control" id="description@(job.Id)" name="description@(job.Id)" @bind-value="@job.Description" />
+            <button class="btn btn-success" @onclick="() => UpdateData(job)">Update</button>
+            <button class="btn btn-danger" @onclick="() => DeleteData(job)">Delete</button>
+        </div>
+}
+-->
+
+<MudButton @onclick="InsertData" Variant="Variant.Filled" Color="Color.Primary">Insert</MudButton>
+
+
+
+
+@if (jobs == null)
+{
+    <p>...Loading</p>
+}
+else
+{
+    <MudTable Items="jobs" @bind-job="job">
+
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="">
+                <MudFab @onclick="@(()=>EditData(context))" Color="Color.Success" StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+                <MudFab @onclick="@(()=>DeleteData(context))" Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+                
+            </MudTd>
+        </RowTemplate>
+        <RowEditingTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTextField @bind-Value="@context.Name" Label="Job Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+
+            <MudTextField @bind-Value="@context.Description" Label="Job Description" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+            <MudTd DataLabel="">
+               
+                <MudFab @onclick="@(()=>UpdateData(context))" Color="Color.Success" StartIcon="@Icons.Material.Filled.Update" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+        </RowEditingTemplate>
+     
+    </MudTable>
+}
+
+@code {
+    private Job job = new();
+    private List<Job> jobs = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string sqlStatement = "SELECT * FROM jobs";
+        jobs = await _data.LoadData<Job, dynamic>(sqlStatement, new { }, _config.GetConnectionString("MySqlConnectionString"));
+    }
+
+    private async Task InsertData()
+    {
+        string sqlStatement = "INSERT INTO jobs (name, description) VALUES (@Name, @Description)";
+
+        await _data.SaveData(sqlStatement, new { Name=@job.Name, Description=@job.Description }, _config.GetConnectionString("MySqlConnectionString"));
+        // Refreshes the data for the view.
+        await OnInitializedAsync();
+    }
+
+    private void EditData(Job job)
+    {
+        job = jobs.FirstOrDefault(j => j.Id == job.Id);
+    }
+
+    private async Task UpdateData(Job job) 
+    {
+        //string sqlStatement = ;
+        string sqlStatement = "UPDATE jobs SET name = @Name, description = @Description WHERE id = @Id";
+
+        await _data.SaveData(sqlStatement, new { Name = job.Name, Description = job.Description, Id = job.Id }, _config.GetConnectionString("MySqlConnectionString"));
+        // Refreshes the data for the view.
+        await OnInitializedAsync();
+    }
+
+    private async Task DeleteData(Job job)
+    {
+        //string sqlStatement = ;
+        string sqlStatement = "DELETE FROM jobs WHERE id = @Id";
+
+        await _data.SaveData(sqlStatement, new { Id = job.Id }, _config.GetConnectionString("MySqlConnectionString"));
+        // Refreshes the data for the view.
+        await OnInitializedAsync();
+    }
+}
