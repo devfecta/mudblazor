@@ -1,0 +1,71 @@
+version: "3.9"
+# docker compose --env-file ./.env up -d
+services:
+  MySQL:
+    image: mysql:8.0.32
+    container_name: MySQL-Container
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-database:/var/lib/mysql
+    #  - mysql-database:/var/lib/mysql
+    #  - //c/Users/kkelm/GitHub/drupal/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - VIRTUAL_PORT=${VIRTUAL_PORT}
+    #  - LETSENCRYPT_HOST=your-website-one.com 
+    #  - LETSENCRYPT_EMAIL=your.email@domain.com
+    deploy:
+        resources: # Configures physical resource constraints for container to run on platform.
+            limits: # The platform MUST prevent container to allocate more.
+              cpus: "0.5" # Configures a limit or reservation for how much of the available CPU resources (as number of cores) a container can use.
+              memory: 1G # Configures a limit or reservation on the amount of memory a container can allocate, set as a string expressing a byte value.
+            reservations: # The platform MUST guarantee container can allocate at least the configured amount.
+              cpus: "0.25"
+              memory: 512M
+    #deploy:
+    #  replicas: 2
+    #  update_config:
+    #    parallelism: 2
+    #    delay: 10s
+    #  restart_policy:
+    #    condition: on-failure
+    networks:
+      - mysql-network
+
+  Adminer:
+    image: adminer
+    container_name: MySQL-Adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - mysql-network
+    deploy:
+        resources:
+            limits:
+              cpus: "0.5"
+              memory: 2G
+            reservations:
+              cpus: "0.25"
+              memory: 512M
+networks:
+  mysql-network:
+  
+#  default:
+#    external:
+#      name: nginx-proxy
+
+volumes:
+  mysql-database:
+    driver: local
+    driver_opts:
+       o: bind
+       type: none
+       device: ${MYSQL_LOCATION}/_data
+#  devfecta-react-php:
+#  devfecta-mysql:

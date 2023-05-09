@@ -1,5 +1,7 @@
 .vscode
 
+mysql/_data/*.sock
+
 # User-specific files
 *.rsuser
 *.suo
