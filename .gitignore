@@ -1,6 +1,6 @@
 .vscode
-
-mysql/_data/*.sock
+mysql/_data/*
+# mysql/_data/*.sock
 
 # User-specific files
 *.rsuser
